@@ -1,5 +1,6 @@
 public class CustomList {
     private Node head;
+    private Node end;
     public void add(int element) {
         if (head == null) {
             head = new Node(element);
@@ -21,7 +22,7 @@ public class CustomList {
             temp = temp.next;
         }
         try {
-            if (temp.equals(null)) {
+            if (temp == null) {
                 throw new Exception("Нет элемента с таким индексом");
             }
         } catch (Exception e) {
@@ -31,21 +32,25 @@ public class CustomList {
     }
 
     public boolean remove(int index) {
-        int counter = 0;
         Node temp = head;
-        while (counter != index && temp != null) {
-            counter++;
+        for (int i = 0; i < index - 1; i++){
             temp = temp.next;
         }
-        if (temp.equals(null)) {
+        if (temp == null) {
             return false;
-        } else if (temp.next.equals(null)) {
-            temp = null;
+        } else if (index == 0) {
+            head = temp.next;
+            return true;
+        } else if (temp.next.next == null) {
+            temp.next = null;
             return true;
         }
-        while (temp.next != null) {
+
+        while (temp.next.next != null) {
+            temp.next.setValue(temp.next.next.getValue());
             temp = temp.next;
         }
+        temp.next = null;
         return true;
     }
 
@@ -57,13 +62,13 @@ public class CustomList {
         Node temp = head;
         StringBuilder result = new StringBuilder(String.valueOf(head.getValue()));
         while (temp.next != null) {
-            result.append(", " + temp.next.getValue());
+            result.append(", ").append(temp.next.getValue());
             temp = temp.next;
         }
         return result.toString();
     }
 
-    static class Node {
+    private static class Node {
         private int value;
         private Node next;
 
@@ -74,6 +79,9 @@ public class CustomList {
         public Node(int value, Node next) {
             this.value = value;
             this.next = next;
+        }
+
+        public Node() {
         }
 
         public int getValue() {
